@@ -19,6 +19,8 @@ export async function getAllPosts(): Promise<Post[]> {
       title_en: metadata.title_en || metadata.title,
       excerpt_en: metadata.excerpt_en || metadata.excerpt,
       tags_en: metadata.tags_en || metadata.tags,
+      category: metadata.category || 'Chưa phân loại',
+      category_en: metadata.category_en || metadata.category || 'Uncategorized',
       content: viContent.trim(),
       content_en: (enContent || viContent).trim(),
     };

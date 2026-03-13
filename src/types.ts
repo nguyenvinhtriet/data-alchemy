@@ -8,6 +8,8 @@ export interface Post {
   author: string;
   tags: string[];
   tags_en: string[];
+  category: string;
+  category_en: string;
   content: string;
   content_en: string;
 }
@@ -21,4 +23,6 @@ export interface PostMetadata {
   author: string;
   tags: string[];
   tags_en: string[];
+  category: string;
+  category_en: string;
 }

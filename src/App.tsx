@@ -42,6 +42,7 @@ export default function App() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [currentView, setCurrentView] = useState<'home' | 'about'>('home');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [lang, setLang] = useState<'vi' | 'en'>('vi');
@@ -74,6 +75,8 @@ export default function App() {
       contact: "Liên hệ",
       discussion: "Thảo luận",
       discussionDesc: "Chia sẻ suy nghĩ của bạn về blog hoặc bất cứ điều gì.",
+      category: "Danh mục",
+      categories: "Tất cả danh mục",
       namePlaceholder: "Tên của bạn",
       commentPlaceholder: "Viết bình luận...",
       send: "Gửi",
@@ -103,6 +106,8 @@ export default function App() {
       comments: "Comments",
       discussion: "Discussion",
       discussionDesc: "Share your thoughts about the blog or anything else.",
+      category: "Category",
+      categories: "All Categories",
       namePlaceholder: "Your name",
       commentPlaceholder: "Write a comment...",
       send: "Send",
@@ -214,10 +219,15 @@ export default function App() {
     const title = lang === 'vi' ? post.title : post.title_en;
     const excerpt = lang === 'vi' ? post.excerpt : post.excerpt_en;
     const tags = lang === 'vi' ? post.tags : post.tags_en;
+    const category = lang === 'vi' ? post.category : post.category_en;
     
-    return title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesCategory = !selectedCategory || category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
   });
 
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
@@ -228,6 +238,7 @@ export default function App() {
 
   const latestPosts = posts.slice(0, 3);
   const allTags = Array.from(new Set(posts.flatMap(p => lang === 'vi' ? p.tags : p.tags_en)));
+  const allCategories = Array.from(new Set(posts.map(p => lang === 'vi' ? p.category : p.category_en)));
 
   if (loading) {
     return (
@@ -251,6 +262,7 @@ export default function App() {
               setSelectedPost(null);
               setCurrentView('home');
               setSearchQuery('');
+              setSelectedCategory(null);
               setCurrentPage(1);
             }}
             className="text-xl font-bold tracking-tight hover:text-orange-600 transition-colors flex items-center gap-2"
@@ -264,12 +276,41 @@ export default function App() {
               onClick={() => {
                 setSelectedPost(null);
                 setCurrentView('home');
+                setSelectedCategory(null);
                 setCurrentPage(1);
               }}
-              className={cn("hover:text-black transition-colors", currentView === 'home' && !selectedPost && "text-orange-600 font-bold")}
+              className={cn("hover:text-black transition-colors", currentView === 'home' && !selectedPost && !selectedCategory && "text-orange-600 font-bold")}
             >
               {t.posts}
             </button>
+            
+            {/* Categories Dropdown/List in Menu */}
+            <div className="relative group">
+              <button className={cn("hover:text-black transition-colors flex items-center gap-1", selectedCategory && "text-orange-600 font-bold")}>
+                {t.category}
+              </button>
+              <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <div className="bg-white border border-black/5 shadow-xl rounded-xl p-2 min-w-[160px]">
+                  {allCategories.map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setSelectedPost(null);
+                        setCurrentView('home');
+                        setCurrentPage(1);
+                      }}
+                      className={cn(
+                        "w-full text-left px-4 py-2 rounded-lg text-xs hover:bg-black/5 transition-colors",
+                        selectedCategory === cat && "bg-orange-50 text-orange-600 font-bold"
+                      )}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
             <button 
               onClick={() => {
                 setSelectedPost(null);
@@ -378,10 +419,11 @@ export default function App() {
                       >
                         <div className="flex flex-col md:flex-row gap-8">
                           <div className="flex-1 space-y-4">
-                            <div className="flex items-center gap-4 text-xs font-sans uppercase tracking-wider text-orange-600 font-bold">
-                              <span>{format(new Date(post.date), 'dd MMMM, yyyy', { locale: lang === 'vi' ? vi : enUS })}</span>
-                              <span className="w-1 h-1 bg-orange-600 rounded-full" />
-                              <span>{lang === 'vi' ? post.tags[0] : post.tags_en[0]}</span>
+                            <div className="flex flex-wrap items-center gap-4 text-xs font-sans uppercase tracking-wider font-bold">
+                              <span className="px-2 py-0.5 bg-black text-white rounded text-[10px]">
+                                {lang === 'vi' ? post.category : post.category_en}
+                              </span>
+                              <span className="text-orange-600">{format(new Date(post.date), 'dd MMMM, yyyy', { locale: lang === 'vi' ? vi : enUS })}</span>
                             </div>
                             <h2 className="text-3xl font-bold group-hover:text-orange-600 transition-colors leading-snug">
                               {lang === 'vi' ? post.title : post.title_en}
@@ -389,8 +431,17 @@ export default function App() {
                             <p className="text-lg text-black/60 leading-relaxed line-clamp-3">
                               {lang === 'vi' ? post.excerpt : post.excerpt_en}
                             </p>
-                            <div className="pt-4 flex items-center gap-2 text-sm font-sans font-bold group-hover:gap-4 transition-all">
-                              {t.readMore} <ChevronRight className="w-4 h-4" />
+                            <div className="pt-4 space-y-4">
+                              <div className="flex flex-wrap gap-2">
+                                {(lang === 'vi' ? post.tags : post.tags_en).map(tag => (
+                                  <span key={tag} className="text-[10px] font-sans font-bold uppercase tracking-widest text-black/30">
+                                    #{tag}
+                                  </span>
+                                ))}
+                              </div>
+                              <div className="flex items-center gap-2 text-sm font-sans font-bold group-hover:gap-4 transition-all">
+                                {t.readMore} <ChevronRight className="w-4 h-4" />
+                              </div>
                             </div>
                           </div>
                           <div className="hidden md:block w-48 h-48 bg-black/5 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
@@ -472,12 +523,17 @@ export default function App() {
                   </button>
 
                   <header className="mb-12 space-y-6">
-                    <div className="flex flex-wrap gap-2">
-                      {(lang === 'vi' ? selectedPost.tags : selectedPost.tags_en).map(tag => (
-                        <span key={tag} className="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-sans font-bold uppercase tracking-wider">
-                          {tag}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="px-3 py-1 bg-black text-white rounded-full text-[10px] font-sans font-bold uppercase tracking-wider">
+                        {lang === 'vi' ? selectedPost.category : selectedPost.category_en}
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {(lang === 'vi' ? selectedPost.tags : selectedPost.tags_en).map(tag => (
+                          <span key={tag} className="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-sans font-bold uppercase tracking-wider">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                     <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                       {lang === 'vi' ? selectedPost.title : selectedPost.title_en}
@@ -566,6 +622,42 @@ export default function App() {
                       {lang === 'vi' ? post.title : post.title_en}
                     </h5>
                   </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Categories List */}
+            <section className="bg-black/5 rounded-3xl p-8">
+              <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-orange-500" />
+                {t.category}
+              </h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className={cn(
+                    "w-full text-left px-4 py-2 rounded-xl text-sm transition-all",
+                    !selectedCategory ? "bg-orange-500 text-white font-bold" : "hover:bg-black/5"
+                  )}
+                >
+                  {t.categories}
+                </button>
+                {allCategories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setSelectedPost(null);
+                      setCurrentView('home');
+                      setCurrentPage(1);
+                    }}
+                    className={cn(
+                      "w-full text-left px-4 py-2 rounded-xl text-sm transition-all",
+                      selectedCategory === cat ? "bg-orange-500 text-white font-bold" : "hover:bg-black/5"
+                    )}
+                  >
+                    {cat}
+                  </button>
                 ))}
               </div>
             </section>
