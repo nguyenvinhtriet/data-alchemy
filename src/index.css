@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Libre Baskerville", "Georgia", serif;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+  }
+}
+
+/* Markdown Styles */
+.markdown-body {
+  @apply font-serif leading-relaxed text-[#1a1a1a];
+}
+
+.markdown-body h1 {
+  @apply text-4xl font-bold mt-12 mb-6;
+}
+
+.markdown-body h2 {
+  @apply text-3xl font-bold mt-10 mb-4;
+}
+
+.markdown-body h3 {
+  @apply text-2xl font-bold mt-8 mb-3;
+}
+
+.markdown-body p {
+  @apply mb-6 text-lg;
+}
+
+.markdown-body ul, .markdown-body ol {
+  @apply mb-6 ml-6;
+}
+
+.markdown-body ul {
+  @apply list-disc;
+}
+
+.markdown-body ol {
+  @apply list-decimal;
+}
+
+.markdown-body li {
+  @apply mb-2;
+}
+
+.markdown-body blockquote {
+  @apply border-l-4 border-orange-500 bg-orange-50/50 py-4 px-6 mb-6 italic rounded-r-lg;
+}
+
+.markdown-body code {
+  @apply bg-black/5 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.markdown-body pre {
+  @apply bg-black/5 p-6 rounded-2xl mb-6 overflow-x-auto;
+}
+
+.markdown-body pre code {
+  @apply bg-transparent p-0 text-sm;
+}
+
+.markdown-body img {
+  @apply rounded-2xl my-8 w-full;
+}
+
+.markdown-body a {
+  @apply text-orange-600 underline underline-offset-4 hover:text-orange-700 transition-colors;
+}
