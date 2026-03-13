@@ -144,15 +144,18 @@ export default function App() {
     
     const fetchData = async () => {
       try {
-        const likesRes = await fetch(`/api/likes/${slug}`);
+        const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+        const likesRes = await fetch(`${baseUrl}api/likes/${slug}`);
+        if (!likesRes.ok) throw new Error('API unreachable');
         const likesData = await likesRes.json();
         setLikes(likesData.count);
 
-        const commentsRes = await fetch(selectedPost ? `/api/comments/${slug}` : `/api/comments-global`);
+        const commentsRes = await fetch(selectedPost ? `${baseUrl}api/comments/${slug}` : `${baseUrl}api/comments-global`);
+        if (!commentsRes.ok) throw new Error('API unreachable');
         const commentsData = await commentsRes.json();
         setComments(commentsData);
       } catch (err) {
-        console.error("Failed to fetch dynamic data", err);
+        console.warn("Dynamic features (likes/comments) are unavailable in static mode (GitHub Pages).", err);
       }
     };
 
@@ -162,15 +165,17 @@ export default function App() {
   const handleLike = async (action: 'like' | 'dislike') => {
     const slug = selectedPost ? selectedPost.slug : 'global';
     try {
-      const res = await fetch(`/api/likes/${slug}`, {
+      const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+      const res = await fetch(`${baseUrl}api/likes/${slug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action })
       });
+      if (!res.ok) throw new Error('API unreachable');
       const data = await res.json();
       setLikes(data.count);
     } catch (err) {
-      console.error("Failed to update likes", err);
+      console.warn("Likes are unavailable in static mode.", err);
     }
   };
 
@@ -180,24 +185,27 @@ export default function App() {
     
     setSubmittingComment(true);
     const slug = selectedPost ? selectedPost.slug : 'global';
-    const endpoint = selectedPost ? `/api/comments/${slug}` : `/api/comments-global`;
+    const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+    const endpoint = selectedPost ? `${baseUrl}api/comments/${slug}` : `${baseUrl}api/comments-global`;
 
     try {
-      await fetch(endpoint, {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ author: commentAuthor, content: commentContent })
       });
       
+      if (!res.ok) throw new Error('API unreachable');
+
       // Refresh comments
-      const res = await fetch(endpoint);
-      const data = await res.json();
+      const refreshRes = await fetch(endpoint);
+      const data = await refreshRes.json();
       setComments(data);
       
       setCommentContent('');
       setSubmittingComment(false);
     } catch (err) {
-      console.error("Failed to submit comment", err);
+      console.warn("Comments are unavailable in static mode.", err);
       setSubmittingComment(false);
     }
   };
