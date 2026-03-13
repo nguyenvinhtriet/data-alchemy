@@ -7,8 +7,8 @@ excerpt_en: "How to make your SQL statements run faster? Learn about Indexes and
 author: "Triet"
 tags: ["SQL", "Performance", "Optimization"]
 tags_en: ["SQL", "Performance", "Optimization"]
-category: "Dữ liệu"
-category_en: "Data"
+category: "Công nghệ"
+category_en: "Technology"
 ---
 
 # Tối ưu hóa Hiệu năng SQL

@@ -37,6 +37,57 @@ interface Comment {
   created_at: string;
 }
 
+const Skeleton = ({ className }: { className?: string }) => (
+  <div className={cn("animate-pulse bg-black/5 rounded-xl", className)} />
+);
+
+const PostSkeleton = () => (
+  <div className="flex flex-col md:flex-row gap-6 md:gap-8 py-6 md:py-8 border-b border-black/5 last:border-0">
+    <div className="flex-1 space-y-4">
+      <div className="flex gap-4">
+        <Skeleton className="w-20 h-4" />
+        <Skeleton className="w-32 h-4" />
+      </div>
+      <Skeleton className="w-full h-6 md:h-8" />
+      <Skeleton className="w-3/4 h-6 md:h-8" />
+      <div className="space-y-2">
+        <Skeleton className="w-full h-4" />
+        <Skeleton className="w-full h-4" />
+        <Skeleton className="w-1/2 h-4" />
+      </div>
+    </div>
+    <Skeleton className="hidden md:block w-48 h-48 rounded-2xl" />
+  </div>
+);
+
+const CategorySkeleton = () => (
+  <div className="bg-white rounded-2xl md:rounded-[32px] border border-black/5 overflow-hidden flex flex-col h-[380px] md:h-[400px]">
+    <Skeleton className="h-32 md:h-40 rounded-none" />
+    <div className="p-4 md:p-6 space-y-4 flex-1">
+      <Skeleton className="w-3/4 h-6" />
+      <div className="space-y-2">
+        <Skeleton className="w-full h-4" />
+        <Skeleton className="w-full h-4" />
+        <Skeleton className="w-full h-4" />
+      </div>
+      <div className="mt-auto">
+        <Skeleton className="w-full h-10" />
+      </div>
+    </div>
+  </div>
+);
+
+const SidebarSectionSkeleton = () => (
+  <div className="bg-black/5 rounded-2xl md:rounded-3xl p-6 md:p-8 space-y-6">
+    <Skeleton className="w-1/2 h-6" />
+    <div className="space-y-4">
+      <Skeleton className="w-full h-10 md:h-12" />
+      <Skeleton className="w-full h-10 md:h-12" />
+      <Skeleton className="w-full h-10 md:h-12" />
+    </div>
+  </div>
+);
+
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -77,6 +128,8 @@ export default function App() {
       discussionDesc: "Chia sẻ suy nghĩ của bạn về blog hoặc bất cứ điều gì.",
       category: "Danh mục",
       categories: "Tất cả danh mục",
+      relatedPosts: "Bài viết liên quan",
+      seeAll: "Xem tất cả",
       namePlaceholder: "Tên của bạn",
       commentPlaceholder: "Viết bình luận...",
       send: "Gửi",
@@ -108,6 +161,8 @@ export default function App() {
       discussionDesc: "Share your thoughts about the blog or anything else.",
       category: "Category",
       categories: "All Categories",
+      relatedPosts: "Related Posts",
+      seeAll: "See All",
       namePlaceholder: "Your name",
       commentPlaceholder: "Write a comment...",
       send: "Send",
@@ -236,27 +291,41 @@ export default function App() {
     currentPage * postsPerPage
   );
 
-  const latestPosts = posts.slice(0, 3);
+  const latestPosts = posts.slice(0, 5);
   const allTags = Array.from(new Set(posts.flatMap(p => lang === 'vi' ? p.tags : p.tags_en)));
-  const allCategories = Array.from(new Set(posts.map(p => lang === 'vi' ? p.category : p.category_en)));
+  
+  // Sort categories: Hot ones first, then others alphabetically
+  const hotCategories = ['Bản tin', 'Công nghệ', 'Lập trình', 'Tán gẫu'];
+  const hotCategoriesEn = ['Daily', 'Technology', 'Programming', 'Chat'];
+  
+  const allCategories = Array.from(new Set(posts.map(p => lang === 'vi' ? p.category : p.category_en)))
+    .sort((a, b) => {
+      const aIndex = lang === 'vi' ? hotCategories.indexOf(a) : hotCategoriesEn.indexOf(a);
+      const bIndex = lang === 'vi' ? hotCategories.indexOf(b) : hotCategoriesEn.indexOf(b);
+      
+      if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+      if (aIndex !== -1) return -1;
+      if (bIndex !== -1) return 1;
+      return a.localeCompare(b);
+    });
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#fdfcfb] flex items-center justify-center">
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full"
-        />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#fdfcfb] flex items-center justify-center">
+  //       <motion.div 
+  //         animate={{ rotate: 360 }}
+  //         transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+  //         className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full"
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-[#fdfcfb] text-[#1a1a1a] font-sans selection:bg-orange-100 selection:text-orange-900">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/5">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
           <button 
             onClick={() => {
               setSelectedPost(null);
@@ -265,13 +334,13 @@ export default function App() {
               setSelectedCategory(null);
               setCurrentPage(1);
             }}
-            className="text-xl font-bold tracking-tight hover:text-orange-600 transition-colors flex items-center gap-2"
+            className="text-lg md:text-xl font-bold tracking-tight hover:text-orange-600 transition-colors flex items-center gap-2 shrink-0"
           >
             <BookOpen className="w-5 h-5 text-orange-500" />
             <span>{t.blogTitle}</span>
           </button>
           
-          <div className="flex items-center gap-6 text-sm font-sans uppercase tracking-wider text-black/60">
+          <div className="flex items-center gap-3 md:gap-6 text-[10px] md:text-sm font-sans uppercase tracking-wider text-black/60 overflow-x-auto no-scrollbar">
             <button 
               onClick={() => {
                 setSelectedPost(null);
@@ -279,14 +348,14 @@ export default function App() {
                 setSelectedCategory(null);
                 setCurrentPage(1);
               }}
-              className={cn("hover:text-black transition-colors", currentView === 'home' && !selectedPost && !selectedCategory && "text-orange-600 font-bold")}
+              className={cn("hover:text-black transition-colors whitespace-nowrap", currentView === 'home' && !selectedPost && !selectedCategory && "text-orange-600 font-bold")}
             >
               {t.posts}
             </button>
             
             {/* Categories Dropdown/List in Menu */}
             <div className="relative group">
-              <button className={cn("hover:text-black transition-colors flex items-center gap-1", selectedCategory && "text-orange-600 font-bold")}>
+              <button className={cn("hover:text-black transition-colors flex items-center gap-1 whitespace-nowrap", selectedCategory && "text-orange-600 font-bold")}>
                 {t.category}
               </button>
               <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
@@ -316,29 +385,29 @@ export default function App() {
                 setSelectedPost(null);
                 setCurrentView('about');
               }}
-              className={cn("hover:text-black transition-colors", currentView === 'about' && "text-orange-600 font-bold")}
+              className={cn("hover:text-black transition-colors whitespace-nowrap", currentView === 'about' && "text-orange-600 font-bold")}
             >
               {t.about}
             </button>
-            <div className="flex items-center gap-4 ml-4 border-l border-black/10 pl-4">
+            <div className="flex items-center gap-2 md:gap-4 ml-1 md:ml-4 border-l border-black/10 pl-2 md:pl-4">
               <button 
                 onClick={() => setLang(lang === 'vi' ? 'en' : 'vi')}
-                className="flex items-center gap-2 hover:text-orange-600 transition-colors font-bold"
+                className="flex items-center gap-1 md:gap-2 hover:text-orange-600 transition-colors font-bold"
               >
-                <Languages className="w-4 h-4" />
+                <Languages className="w-3 h-3 md:w-4 md:h-4" />
                 <span>{lang === 'vi' ? 'EN' : 'VI'}</span>
               </button>
-              <div className="flex items-center gap-3">
-                <Github className="w-4 h-4 cursor-pointer hover:text-black transition-colors" />
-                <Twitter className="w-4 h-4 cursor-pointer hover:text-black transition-colors" />
+              <div className="flex items-center gap-2 md:gap-3">
+                <Github className="w-3 h-3 md:w-4 md:h-4 cursor-pointer hover:text-black transition-colors" />
+                <Twitter className="w-3 h-3 md:w-4 md:h-4 cursor-pointer hover:text-black transition-colors" />
               </div>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Main Content */}
           <div className="lg:col-span-8">
             <AnimatePresence mode="wait">
@@ -382,16 +451,16 @@ export default function App() {
                   className="space-y-12"
                 >
                   {/* Hero Section */}
-                  <header className="mb-16">
-                    <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+                  <header className="mb-10 md:mb-16">
+                    <h1 className="text-3xl md:text-7xl font-bold leading-tight mb-4 md:mb-6">
                       {t.heroTitle} <br />
                       <span className="italic text-orange-600">{t.heroHighlight}</span>{t.heroSuffix}
                     </h1>
-                    <p className="text-xl text-black/60 max-w-2xl font-sans leading-relaxed">
+                    <p className="text-base md:text-xl text-black/60 max-w-2xl font-sans leading-relaxed">
                       {t.heroDesc}
                     </p>
                     
-                    <div className="mt-10 relative max-w-md">
+                    <div className="mt-8 md:mt-10 relative max-w-md">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" />
                       <input 
                         type="text"
@@ -401,60 +470,64 @@ export default function App() {
                           setSearchQuery(e.target.value);
                           setCurrentPage(1);
                         }}
-                        className="w-full bg-black/5 border-none rounded-full py-3 pl-10 pr-4 font-sans text-sm focus:ring-2 focus:ring-orange-500/20 transition-all outline-none"
+                        className="w-full bg-black/5 border-none rounded-full py-2.5 md:py-3 pl-10 pr-4 font-sans text-sm focus:ring-2 focus:ring-orange-500/20 transition-all outline-none"
                       />
                     </div>
                   </header>
 
                   {/* Posts List */}
-                  <div className="grid gap-16">
-                    {paginatedPosts.map((post, index) => (
-                      <motion.article 
-                        key={post.slug}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="group cursor-pointer"
-                        onClick={() => setSelectedPost(post)}
-                      >
-                        <div className="flex flex-col md:flex-row gap-8">
-                          <div className="flex-1 space-y-4">
-                            <div className="flex flex-wrap items-center gap-4 text-xs font-sans uppercase tracking-wider font-bold">
-                              <span className="px-2 py-0.5 bg-black text-white rounded text-[10px]">
-                                {lang === 'vi' ? post.category : post.category_en}
-                              </span>
-                              <span className="text-orange-600">{format(new Date(post.date), 'dd MMMM, yyyy', { locale: lang === 'vi' ? vi : enUS })}</span>
+                  <div className="grid gap-10 md:gap-16">
+                    {loading ? (
+                      Array.from({ length: 3 }).map((_, i) => <PostSkeleton key={i} />)
+                    ) : (
+                      paginatedPosts.map((post, index) => (
+                        <motion.article 
+                          key={post.slug}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="group cursor-pointer"
+                          onClick={() => setSelectedPost(post)}
+                        >
+                          <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+                            <div className="flex-1 space-y-3 md:space-y-4">
+                              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-[10px] md:text-xs font-sans uppercase tracking-wider font-bold">
+                                <span className="px-2 py-0.5 bg-black text-white rounded text-[9px] md:text-[10px]">
+                                  {lang === 'vi' ? post.category : post.category_en}
+                                </span>
+                                <span className="text-orange-600">{format(new Date(post.date), 'dd MMMM, yyyy', { locale: lang === 'vi' ? vi : enUS })}</span>
+                              </div>
+                              <h2 className="text-xl md:text-3xl font-bold group-hover:text-orange-600 transition-colors leading-snug">
+                                {lang === 'vi' ? post.title : post.title_en}
+                              </h2>
+                              <p className="text-sm md:text-lg text-black/60 leading-relaxed line-clamp-2 md:line-clamp-3">
+                                {lang === 'vi' ? post.excerpt : post.excerpt_en}
+                              </p>
+                              <div className="pt-2 md:pt-4 space-y-3 md:space-y-4">
+                                <div className="flex flex-wrap gap-2">
+                                  {(lang === 'vi' ? post.tags : post.tags_en).map(tag => (
+                                    <span key={tag} className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-widest text-black/30">
+                                      #{tag}
+                                    </span>
+                                  ))}
+                                </div>
+                                <div className="flex items-center gap-2 text-xs md:text-sm font-sans font-bold group-hover:gap-4 transition-all">
+                                  {t.readMore} <ChevronRight className="w-4 h-4" />
+                                </div>
+                              </div>
                             </div>
-                            <h2 className="text-3xl font-bold group-hover:text-orange-600 transition-colors leading-snug">
-                              {lang === 'vi' ? post.title : post.title_en}
-                            </h2>
-                            <p className="text-lg text-black/60 leading-relaxed line-clamp-3">
-                              {lang === 'vi' ? post.excerpt : post.excerpt_en}
-                            </p>
-                            <div className="pt-4 space-y-4">
-                              <div className="flex flex-wrap gap-2">
-                                {(lang === 'vi' ? post.tags : post.tags_en).map(tag => (
-                                  <span key={tag} className="text-[10px] font-sans font-bold uppercase tracking-widest text-black/30">
-                                    #{tag}
-                                  </span>
-                                ))}
-                              </div>
-                              <div className="flex items-center gap-2 text-sm font-sans font-bold group-hover:gap-4 transition-all">
-                                {t.readMore} <ChevronRight className="w-4 h-4" />
-                              </div>
+                            <div className="hidden md:block w-48 h-48 bg-black/5 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 shrink-0">
+                               <img 
+                                src={`https://picsum.photos/seed/${post.slug}/400/400`} 
+                                alt={lang === 'vi' ? post.title : post.title_en}
+                                className="w-full h-full object-cover"
+                                referrerPolicy="no-referrer"
+                              />
                             </div>
                           </div>
-                          <div className="hidden md:block w-48 h-48 bg-black/5 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
-                             <img 
-                              src={`https://picsum.photos/seed/${post.slug}/400/400`} 
-                              alt={lang === 'vi' ? post.title : post.title_en}
-                              className="w-full h-full object-cover"
-                              referrerPolicy="no-referrer"
-                            />
-                          </div>
-                        </div>
-                      </motion.article>
-                    ))}
+                        </motion.article>
+                      ))
+                    )}
                   </div>
 
                   {filteredPosts.length === 0 && (
@@ -483,6 +556,81 @@ export default function App() {
                       >
                         {t.next}
                       </button>
+                    </div>
+                  )}
+
+                  {/* Category Grid Section */}
+                  {!selectedCategory && searchQuery === '' && (
+                    <div className="mt-20 md:mt-32 pt-12 md:pt-20 border-t border-black/5">
+                      <h3 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 flex items-center gap-3">
+                        <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />
+                        {t.category}
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                        {loading ? (
+                          Array.from({ length: 4 }).map((_, i) => <CategorySkeleton key={i} />)
+                        ) : (
+                          allCategories.map(cat => {
+                            const categoryPosts = posts.filter(p => (lang === 'vi' ? p.category : p.category_en) === cat);
+                            if (categoryPosts.length === 0) return null;
+                            
+                            const featuredPost = categoryPosts[0];
+                            const otherPosts = categoryPosts.slice(1, 6); // Show up to 5 links
+
+                            return (
+                              <div key={cat} className="bg-white rounded-2xl md:rounded-[32px] border border-black/5 overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all">
+                                {/* Featured Post in Category */}
+                                <div 
+                                  className="relative h-32 md:h-40 cursor-pointer group" // Reduced height from h-40 to h-32 on mobile
+                                  onClick={() => setSelectedPost(featuredPost)}
+                                >
+                                  <img 
+                                    src={`https://picsum.photos/seed/${featuredPost.slug}/600/400`} 
+                                    alt={lang === 'vi' ? featuredPost.title : featuredPost.title_en}
+                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                                    referrerPolicy="no-referrer"
+                                  />
+                                  <div className="absolute bottom-3 left-3 md:bottom-4 md:left-4">
+                                    <span className="px-3 py-1 md:px-4 md:py-1.5 bg-red-600 text-white rounded-full text-[9px] md:text-[11px] font-bold uppercase tracking-wider shadow-lg">
+                                      {cat}
+                                    </span>
+                                  </div>
+                                </div>
+                                
+                                <div className="p-4 md:p-6 flex-1 flex flex-col">
+                                  <h3 
+                                    onClick={() => setSelectedPost(featuredPost)}
+                                    className="text-lg font-bold mb-4 cursor-pointer hover:text-orange-600 transition-colors line-clamp-2 leading-tight" // Reduced text size and margin
+                                  >
+                                    {lang === 'vi' ? featuredPost.title : featuredPost.title_en}
+                                  </h3>
+                                  
+                                  <div className="space-y-2 mb-6 flex-1"> {/* Reduced spacing and margin */}
+                                    {otherPosts.map(post => (
+                                      <div 
+                                        key={post.slug}
+                                        onClick={() => setSelectedPost(post)}
+                                        className="group cursor-pointer py-2 border-t border-black/5 first:border-t-0" // Reduced padding
+                                      >
+                                        <h4 className="text-xs text-black/70 group-hover:text-orange-600 transition-colors line-clamp-1 leading-snug"> {/* Reduced text size and line clamp */}
+                                          {lang === 'vi' ? post.title : post.title_en}
+                                        </h4>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  
+                                  <button 
+                                    onClick={() => setSelectedCategory(cat)}
+                                    className="w-full py-2.5 bg-black/5 hover:bg-black/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all" // Reduced padding and text size
+                                  >
+                                    {t.seeAll}
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
                     </div>
                   )}
 
@@ -535,11 +683,11 @@ export default function App() {
                         ))}
                       </div>
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                    <h1 className="text-3xl md:text-6xl font-bold leading-tight">
                       {lang === 'vi' ? selectedPost.title : selectedPost.title_en}
                     </h1>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-6 text-sm font-sans text-black/50">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex flex-wrap items-center gap-4 md:gap-6 text-xs md:text-sm font-sans text-black/50">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
                           {format(new Date(selectedPost.date), 'dd MMMM, yyyy', { locale: lang === 'vi' ? vi : enUS })}
@@ -569,16 +717,49 @@ export default function App() {
                     </div>
                   </header>
 
-                  <div className="prose prose-lg prose-orange max-w-none prose-headings:font-serif prose-p:leading-relaxed prose-pre:bg-black/5 prose-pre:text-black prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-lg">
+                  <div className="prose prose-base md:prose-lg prose-orange max-w-none prose-headings:font-sans prose-p:leading-relaxed prose-pre:bg-black/5 prose-pre:text-black prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-lg">
                     <div className="markdown-body">
                       <Markdown>{lang === 'vi' ? selectedPost.content : selectedPost.content_en}</Markdown>
                     </div>
                   </div>
 
+                  {/* Related Posts Section */}
+                  <div className="mt-12 md:mt-20 pt-10 border-t border-black/5">
+                    <h3 className="text-xl md:text-2xl font-bold mb-8 flex items-center gap-3">
+                      <BookOpen className="w-6 h-6 text-orange-500" />
+                      {t.relatedPosts}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {posts
+                        .filter(p => p.slug !== selectedPost.slug && (
+                          p.category === selectedPost.category || 
+                          p.tags.some(tag => selectedPost.tags.includes(tag))
+                        ))
+                        .slice(0, 4)
+                        .map(post => (
+                          <div 
+                            key={post.slug}
+                            onClick={() => {
+                              setSelectedPost(post);
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="group cursor-pointer p-4 rounded-2xl hover:bg-black/5 transition-all border border-transparent hover:border-black/5"
+                          >
+                            <div className="text-[10px] font-sans font-bold uppercase tracking-widest text-orange-600 mb-2">
+                              {lang === 'vi' ? post.category : post.category_en}
+                            </div>
+                            <h4 className="font-bold group-hover:text-orange-600 transition-colors line-clamp-2">
+                              {lang === 'vi' ? post.title : post.title_en}
+                            </h4>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+
                   {/* Post Discussion */}
-                  <div className="mt-20 pt-20 border-t border-black/5">
-                    <h3 className="text-3xl font-bold mb-8 flex items-center gap-3">
-                      <MessageSquare className="w-8 h-8 text-orange-500" />
+                  <div className="mt-16 md:mt-20 pt-12 md:pt-20 border-t border-black/5">
+                    <h3 className="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
+                      <MessageSquare className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />
                       {t.comments}
                     </h3>
                     <CommentSection 
@@ -599,119 +780,129 @@ export default function App() {
 
           {/* Sidebar */}
           <aside className="lg:col-span-4 space-y-12">
-            {/* Latest Posts */}
-            <section className="bg-black/5 rounded-3xl p-8">
-              <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-orange-500" />
-                {t.latest}
-              </h4>
-              <div className="space-y-6">
-                {latestPosts.map(post => (
-                  <div 
-                    key={post.slug} 
-                    className="group cursor-pointer"
-                    onClick={() => {
-                      setSelectedPost(post);
-                      setCurrentView('home');
-                    }}
-                  >
-                    <div className="text-xs font-sans text-black/40 uppercase tracking-wider mb-1">
-                      {format(new Date(post.date), 'dd/MM/yyyy', { locale: lang === 'vi' ? vi : enUS })}
-                    </div>
-                    <h5 className="font-bold group-hover:text-orange-600 transition-colors line-clamp-2">
-                      {lang === 'vi' ? post.title : post.title_en}
-                    </h5>
+            {loading ? (
+              <>
+                <SidebarSectionSkeleton />
+                <SidebarSectionSkeleton />
+                <SidebarSectionSkeleton />
+              </>
+            ) : (
+              <>
+                {/* Latest Posts */}
+                <section className="bg-black/5 rounded-2xl md:rounded-3xl p-6 md:p-8">
+                  <h4 className="text-lg md:text-xl font-bold mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-orange-500" />
+                    {t.latest}
+                  </h4>
+                  <div className="space-y-4"> {/* Reduced spacing from space-y-6 to space-y-4 */}
+                    {latestPosts.map(post => (
+                      <div 
+                        key={post.slug} 
+                        className="group cursor-pointer py-1" // Added slight vertical padding
+                        onClick={() => {
+                          setSelectedPost(post);
+                          setCurrentView('home');
+                        }}
+                      >
+                        <div className="text-[10px] font-sans text-black/40 uppercase tracking-wider mb-0.5"> {/* Reduced text size and margin */}
+                          {format(new Date(post.date), 'dd/MM/yyyy', { locale: lang === 'vi' ? vi : enUS })}
+                        </div>
+                        <h5 className="text-sm font-bold group-hover:text-orange-600 transition-colors line-clamp-1"> {/* Reduced text size and line clamp to 1 */}
+                          {lang === 'vi' ? post.title : post.title_en}
+                        </h5>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </section>
+                </section>
 
-            {/* Categories List */}
-            <section className="bg-black/5 rounded-3xl p-8">
-              <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-orange-500" />
-                {t.category}
-              </h4>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={cn(
-                    "w-full text-left px-4 py-2 rounded-xl text-sm transition-all",
-                    !selectedCategory ? "bg-orange-500 text-white font-bold" : "hover:bg-black/5"
-                  )}
-                >
-                  {t.categories}
-                </button>
-                {allCategories.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setSelectedPost(null);
-                      setCurrentView('home');
-                      setCurrentPage(1);
-                    }}
-                    className={cn(
-                      "w-full text-left px-4 py-2 rounded-xl text-sm transition-all",
-                      selectedCategory === cat ? "bg-orange-500 text-white font-bold" : "hover:bg-black/5"
-                    )}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </section>
+                {/* Categories List */}
+                <section className="bg-black/5 rounded-2xl md:rounded-3xl p-6 md:p-8">
+                  <h4 className="text-lg md:text-xl font-bold mb-6 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-orange-500" />
+                    {t.category}
+                  </h4>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => setSelectedCategory(null)}
+                      className={cn(
+                        "w-full text-left px-4 py-2 rounded-xl text-sm transition-all",
+                        !selectedCategory ? "bg-orange-500 text-white font-bold" : "hover:bg-black/5"
+                      )}
+                    >
+                      {t.categories}
+                    </button>
+                    {allCategories.map(cat => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setSelectedPost(null);
+                          setCurrentView('home');
+                          setCurrentPage(1);
+                        }}
+                        className={cn(
+                          "w-full text-left px-4 py-2 rounded-xl text-sm transition-all",
+                          selectedCategory === cat ? "bg-orange-500 text-white font-bold" : "hover:bg-black/5"
+                        )}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </section>
 
-            {/* Tags Cloud */}
-            <section className="bg-black/5 rounded-3xl p-8">
-              <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <Tag className="w-5 h-5 text-orange-500" />
-                {t.popularTags}
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {allTags.map(tag => (
-                  <button 
-                    key={tag}
-                    onClick={() => {
-                      if (searchQuery === tag) {
-                        setSearchQuery('');
-                      } else {
-                        setSearchQuery(tag);
-                        setCurrentPage(1);
-                        setSelectedPost(null);
-                        setCurrentView('home');
-                      }
-                    }}
-                    className={cn(
-                      "px-4 py-2 rounded-full text-sm font-sans transition-all",
-                      searchQuery === tag 
-                        ? "bg-orange-500 text-white" 
-                        : "bg-white hover:bg-orange-100 text-black/60"
-                    )}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </section>
+                {/* Tags Cloud */}
+                <section className="bg-black/5 rounded-2xl md:rounded-3xl p-6 md:p-8">
+                  <h4 className="text-lg md:text-xl font-bold mb-6 flex items-center gap-2">
+                    <Tag className="w-5 h-5 text-orange-500" />
+                    {t.popularTags}
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {allTags.map(tag => (
+                      <button 
+                        key={tag}
+                        onClick={() => {
+                          if (searchQuery === tag) {
+                            setSearchQuery('');
+                          } else {
+                            setSearchQuery(tag);
+                            setCurrentPage(1);
+                            setSelectedPost(null);
+                            setCurrentView('home');
+                          }
+                        }}
+                        className={cn(
+                          "px-4 py-2 rounded-full text-sm font-sans transition-all",
+                          searchQuery === tag 
+                            ? "bg-orange-500 text-white" 
+                            : "bg-white hover:bg-orange-100 text-black/60"
+                        )}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </section>
 
-            {/* Newsletter */}
-            <section className="bg-orange-500 rounded-3xl p-8 text-white">
-              <h4 className="text-xl font-bold mb-4">{t.newsletterTitle}</h4>
-              <p className="text-white/80 font-sans text-sm mb-6 leading-relaxed">
-                {t.newsletterDesc}
-              </p>
-              <div className="space-y-3">
-                <input 
-                  type="email" 
-                  placeholder={t.emailPlaceholder}
-                  className="w-full bg-white/20 border-none rounded-full py-3 px-4 text-sm placeholder:text-white/60 outline-none focus:ring-2 focus:ring-white/40 transition-all"
-                />
-                <button className="w-full bg-white text-orange-600 font-sans font-bold py-3 rounded-full hover:bg-orange-50 transition-all">
-                  {t.subscribe}
-                </button>
-              </div>
-            </section>
+                {/* Newsletter */}
+                <section className="bg-orange-500 rounded-2xl md:rounded-3xl p-6 md:p-8 text-white">
+                  <h4 className="text-lg md:text-xl font-bold mb-4">{t.newsletterTitle}</h4>
+                  <p className="text-white/80 font-sans text-sm mb-6 leading-relaxed">
+                    {t.newsletterDesc}
+                  </p>
+                  <div className="space-y-3">
+                    <input 
+                      type="email" 
+                      placeholder={t.emailPlaceholder}
+                      className="w-full bg-white/20 border-none rounded-full py-3 px-4 text-sm placeholder:text-white/60 outline-none focus:ring-2 focus:ring-white/40 transition-all"
+                    />
+                    <button className="w-full bg-white text-orange-600 font-sans font-bold py-3 rounded-full hover:bg-orange-50 transition-all">
+                      {t.subscribe}
+                    </button>
+                  </div>
+                </section>
+              </>
+            )}
           </aside>
         </div>
       </main>

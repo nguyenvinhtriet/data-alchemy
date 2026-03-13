@@ -7,8 +7,8 @@ excerpt_en: "Data modeling is a crucial step to build efficient systems. Learn a
 author: "Triet"
 tags: ["Data Modeling", "Architecture", "Database"]
 tags_en: ["Data Modeling", "Architecture", "Database"]
-category: "Dữ liệu"
-category_en: "Data"
+category: "Công nghệ"
+category_en: "Technology"
 ---
 
 # Cơ bản về Mô hình hóa Dữ liệu

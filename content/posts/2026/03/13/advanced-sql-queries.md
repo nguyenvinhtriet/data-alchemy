@@ -7,8 +7,8 @@ excerpt_en: "Go beyond basic commands with Window Functions, CTEs, and complex S
 author: "Triet"
 tags: ["SQL", "Advanced", "Data Analysis"]
 tags_en: ["SQL", "Advanced", "Data Analysis"]
-category: "Dữ liệu"
-category_en: "Data"
+category: "Công nghệ"
+category_en: "Technology"
 ---
 
 # Truy vấn SQL Nâng cao

@@ -7,8 +7,8 @@ excerpt_en: "SQL is the standard language for managing relational databases. Let
 author: "Triet"
 tags: ["SQL", "Database", "Data"]
 tags_en: ["SQL", "Database", "Data"]
-category: "Dữ liệu"
-category_en: "Data"
+category: "Công nghệ"
+category_en: "Technology"
 ---
 
 # Giới thiệu về SQL
