@@ -72,6 +72,18 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  app.delete("/api/comments/:id", (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+    
+    if (password !== "Admin@123q") {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    db.prepare("DELETE FROM comments WHERE id = ?").run(id);
+    res.json({ success: true });
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

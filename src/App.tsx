@@ -20,7 +20,10 @@ import {
   ThumbsDown,
   MessageSquare,
   Send,
-  Clock
+  Clock,
+  Trash2,
+  X,
+  Lock
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { format } from 'date-fns';
@@ -91,13 +94,17 @@ const SidebarSectionSkeleton = () => (
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [currentView, setCurrentView] = useState<'home' | 'contact'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'contact' | 'discussion'>('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [lang, setLang] = useState<'vi' | 'en'>('vi');
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteError, setDeleteError] = useState('');
   const postsPerPage = 5;
 
   const t = {
@@ -280,6 +287,40 @@ export default function App() {
     } catch (err) {
       console.warn("Comments are unavailable in static mode.", err);
       setSubmittingComment(false);
+    }
+  };
+
+  const handleDeleteComment = async () => {
+    if (!commentToDelete) return;
+    if (deletePassword !== "Admin@123q") {
+      setDeleteError("Sai mật khẩu!");
+      return;
+    }
+
+    try {
+      const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+      const res = await fetch(`${baseUrl}api/comments/${commentToDelete}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: deletePassword })
+      });
+
+      if (!res.ok) throw new Error('Delete failed');
+
+      // Refresh comments
+      const slug = selectedPost ? selectedPost.slug : 'global';
+      const endpoint = selectedPost ? `${baseUrl}api/comments/${slug}` : `${baseUrl}api/comments-global`;
+      const refreshRes = await fetch(endpoint);
+      const data = await refreshRes.json();
+      setComments(data);
+
+      setDeleteModalOpen(false);
+      setCommentToDelete(null);
+      setDeletePassword('');
+      setDeleteError('');
+    } catch (err) {
+      console.error("Delete failed", err);
+      setDeleteError("Có lỗi xảy ra khi xóa.");
     }
   };
 
@@ -509,6 +550,38 @@ export default function App() {
                     </button>
                   </form>
                 </motion.div>
+              ) : currentView === 'discussion' ? (
+                <motion.div
+                  key="discussion"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-12"
+                >
+                  <header className="mb-10 md:mb-16">
+                    <h1 className="text-3xl md:text-7xl font-bold leading-tight mb-4 md:mb-6">
+                      {t.discussion}
+                    </h1>
+                    <p className="text-lg md:text-xl text-black/60 max-w-2xl font-sans leading-relaxed">
+                      {t.discussionDesc}
+                    </p>
+                  </header>
+
+                  <CommentSection 
+                    comments={comments}
+                    author={commentAuthor}
+                    content={commentContent}
+                    onAuthorChange={setCommentAuthor}
+                    onContentChange={setCommentContent}
+                    onSubmit={handleSubmitComment}
+                    submitting={submittingComment}
+                    onDelete={(id) => {
+                      setCommentToDelete(id);
+                      setDeleteModalOpen(true);
+                    }}
+                    t={t}
+                  />
+                </motion.div>
               ) : !selectedPost ? (
                 <motion.div
                   key="list"
@@ -718,6 +791,10 @@ export default function App() {
                       onContentChange={setCommentContent}
                       onSubmit={handleSubmitComment}
                       submitting={submittingComment}
+                      onDelete={(id) => {
+                        setCommentToDelete(id);
+                        setDeleteModalOpen(true);
+                      }}
                       t={t}
                     />
                   </div>
@@ -837,6 +914,10 @@ export default function App() {
                       onContentChange={setCommentContent}
                       onSubmit={handleSubmitComment}
                       submitting={submittingComment}
+                      onDelete={(id) => {
+                        setCommentToDelete(id);
+                        setDeleteModalOpen(true);
+                      }}
                       t={t}
                     />
                   </div>
@@ -844,6 +925,77 @@ export default function App() {
               )}
             </AnimatePresence>
           </div>
+
+          {/* Delete Modal */}
+          <AnimatePresence>
+            {deleteModalOpen && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setDeleteModalOpen(false)}
+                  className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                />
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                  className="relative bg-white rounded-[32px] p-8 md:p-10 w-full max-w-md shadow-2xl"
+                >
+                  <button 
+                    onClick={() => setDeleteModalOpen(false)}
+                    className="absolute top-6 right-6 p-2 hover:bg-black/5 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                  
+                  <div className="flex flex-col items-center text-center space-y-6">
+                    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
+                      <Lock className="w-8 h-8 text-red-500" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-bold">Xác nhận xóa</h3>
+                      <p className="text-black/60 font-sans text-sm">
+                        Vui lòng nhập mật khẩu quản trị để xóa bình luận này.
+                      </p>
+                    </div>
+                    
+                    <div className="w-full space-y-4">
+                      <input 
+                        type="password"
+                        placeholder="Mật khẩu"
+                        value={deletePassword}
+                        onChange={(e) => setDeletePassword(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleDeleteComment()}
+                        className="w-full bg-black/5 border-none rounded-2xl py-4 px-6 font-sans text-sm outline-none focus:ring-2 focus:ring-red-500/20 transition-all"
+                        autoFocus
+                      />
+                      {deleteError && (
+                        <p className="text-red-500 text-xs font-bold font-sans">{deleteError}</p>
+                      )}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 w-full pt-2">
+                      <button 
+                        onClick={() => setDeleteModalOpen(false)}
+                        className="py-4 px-6 rounded-full font-sans font-bold text-sm bg-black/5 hover:bg-black/10 transition-all"
+                      >
+                        Hủy
+                      </button>
+                      <button 
+                        onClick={handleDeleteComment}
+                        className="py-4 px-6 rounded-full font-sans font-bold text-sm bg-red-500 text-white hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
+                      >
+                        Xóa ngay
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
 
           {/* Sidebar */}
           <aside className="lg:col-span-4 space-y-12">
@@ -1020,6 +1172,7 @@ function CommentSection({
   onContentChange, 
   onSubmit,
   submitting,
+  onDelete,
   t
 }: {
   comments: Comment[];
@@ -1029,6 +1182,7 @@ function CommentSection({
   onContentChange: (val: string) => void;
   onSubmit: (e: React.FormEvent) => void;
   submitting: boolean;
+  onDelete: (id: number) => void;
   t: any;
 }) {
   return (
@@ -1065,16 +1219,25 @@ function CommentSection({
       {/* Comments List */}
       <div className="space-y-8">
         {comments.map((comment) => (
-          <div key={comment.id} className="flex gap-4">
+          <div key={comment.id} className="flex gap-4 group/comment">
             <div className="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center text-black/40 font-bold shrink-0">
               {comment.author[0].toUpperCase()}
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <span className="font-bold">{comment.author}</span>
-                <span className="text-xs font-sans text-black/30">
-                  {format(new Date(comment.created_at), 'HH:mm - dd/MM/yyyy')}
-                </span>
+            <div className="flex-1 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="font-bold">{comment.author}</span>
+                  <span className="text-xs font-sans text-black/30">
+                    {format(new Date(comment.created_at), 'HH:mm - dd/MM/yyyy')}
+                  </span>
+                </div>
+                <button 
+                  onClick={() => onDelete(comment.id)}
+                  className="opacity-0 group-hover/comment:opacity-100 p-2 hover:bg-red-50 text-black/20 hover:text-red-500 rounded-full transition-all"
+                  title="Xóa bình luận"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
               <p className="text-black/70 font-sans leading-relaxed">
                 {comment.content}
