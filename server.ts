@@ -26,14 +26,16 @@ async function startServer() {
 
   app.use(express.json());
 
+  const apiRouter = express.Router();
+
   // API Routes
-  app.get("/api/likes/:slug", (req, res) => {
+  apiRouter.get("/likes/:slug", (req, res) => {
     const { slug } = req.params;
     const row = db.prepare("SELECT count FROM likes WHERE slug = ?").get(slug) as { count: number } | undefined;
     res.json({ count: row?.count || 0 });
   });
 
-  app.post("/api/likes/:slug", (req, res) => {
+  apiRouter.post("/likes/:slug", (req, res) => {
     const { slug } = req.params;
     const { action } = req.body; // 'like' or 'dislike'
     
@@ -45,13 +47,13 @@ async function startServer() {
     res.json({ count: newCount });
   });
 
-  app.get("/api/comments/:slug", (req, res) => {
+  apiRouter.get("/comments/:slug", (req, res) => {
     const { slug } = req.params;
     const comments = db.prepare("SELECT * FROM comments WHERE slug = ? ORDER BY created_at DESC").all(slug);
     res.json(comments);
   });
 
-  app.post("/api/comments/:slug", (req, res) => {
+  apiRouter.post("/comments/:slug", (req, res) => {
     const { slug } = req.params;
     const { author, content } = req.body;
     if (!author || !content) return res.status(400).json({ error: "Missing fields" });
@@ -61,18 +63,18 @@ async function startServer() {
   });
 
   // Global discussion (home page)
-  app.get("/api/comments-global", (req, res) => {
+  apiRouter.get("/comments-global", (req, res) => {
     const comments = db.prepare("SELECT * FROM comments WHERE slug = 'global' ORDER BY created_at DESC").all();
     res.json(comments);
   });
 
-  app.post("/api/comments-global", (req, res) => {
+  apiRouter.post("/comments-global", (req, res) => {
     const { author, content } = req.body;
     db.prepare("INSERT INTO comments (slug, author, content) VALUES ('global', ?, ?)").run(author, content);
     res.json({ success: true });
   });
 
-  app.delete("/api/comments/:id", (req, res) => {
+  apiRouter.delete("/comments/:id", (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
     
@@ -84,16 +86,20 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  app.use("/data-alchemy/api", apiRouter);
+  app.use("/api", apiRouter); // Fallback for local dev if needed
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
+      base: "/data-alchemy/",
     });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    app.use("/data-alchemy/", express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
