@@ -292,10 +292,6 @@ export default function App() {
 
   const handleDeleteComment = async () => {
     if (!commentToDelete) return;
-    if (deletePassword !== "Admin@123q") {
-      setDeleteError("Sai mật khẩu!");
-      return;
-    }
 
     try {
       const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
@@ -304,6 +300,11 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: deletePassword })
       });
+
+      if (res.status === 401) {
+        setDeleteError("Sai mật khẩu!");
+        return;
+      }
 
       if (!res.ok) throw new Error('Delete failed');
 

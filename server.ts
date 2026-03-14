@@ -2,8 +2,12 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import Database from "better-sqlite3";
+import crypto from "crypto";
 
 const db = new Database("blog.db");
+
+// Admin password hash (SHA-256 of 'Admin@123q')
+const ADMIN_PASSWORD_HASH = "51ca4d506b7c02bb4e779be45a4b4b85516b2294dfd11db96f15d9bd97287c2c";
 
 // Initialize database
 db.exec(`
@@ -78,7 +82,11 @@ async function startServer() {
     const { id } = req.params;
     const { password } = req.body;
     
-    if (password !== "Admin@123q") {
+    if (!password) return res.status(400).json({ error: "Missing password" });
+
+    const hash = crypto.createHash('sha256').update(password).digest('hex');
+    
+    if (hash !== ADMIN_PASSWORD_HASH) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
