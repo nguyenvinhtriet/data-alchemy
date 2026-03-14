@@ -28,7 +28,7 @@ import { vi, enUS } from 'date-fns/locale';
 import { getAllPosts } from './lib/posts';
 import { Post } from './types';
 import { cn } from './lib/utils';
-import { Languages } from 'lucide-react';
+import { Languages, ChevronDown } from 'lucide-react';
 
 interface Comment {
   id: number;
@@ -91,19 +91,19 @@ const SidebarSectionSkeleton = () => (
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [currentView, setCurrentView] = useState<'home' | 'about'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'contact'>('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [lang, setLang] = useState<'vi' | 'en'>('vi');
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const postsPerPage = 5;
 
   const t = {
     vi: {
       blogTitle: "Minimal Blog",
       posts: "Bài viết",
-      about: "Về tôi",
       searchPlaceholder: "Tìm kiếm bài viết...",
       heroTitle: "Suy nghĩ, ",
       heroHighlight: "Sáng tạo",
@@ -117,9 +117,12 @@ export default function App() {
       latest: "Mới nhất",
       popularTags: "Thẻ phổ biến",
       comments: "Bình luận",
-      aboutTitle: "Chào, tôi là ",
-      aboutDesc1: "Tôi là một lập trình viên đam mê xây dựng những sản phẩm số tinh tế và hữu ích. Blog này là nơi tôi ghi lại hành trình khám phá công nghệ, từ những dòng code đầu tiên đến những kiến trúc hệ thống phức tạp.",
-      aboutDesc2: "Với tôi, lập trình không chỉ là công việc, mà là một hình thức nghệ thuật để giải quyết các vấn đề thực tế. Tôi tin vào sức mạnh của mã nguồn mở và sự chia sẻ kiến thức trong cộng đồng.",
+      contactTitle: "Liên hệ với tôi",
+      contactDesc: "Bạn có câu hỏi hoặc muốn hợp tác? Hãy để lại lời nhắn bên dưới.",
+      nameLabel: "Họ tên",
+      emailLabel: "Email",
+      subjectLabel: "Chủ đề",
+      messageLabel: "Nội dung",
       skills: "Kỹ năng của tôi",
       links: "Liên kết",
       home: "Trang chủ",
@@ -133,6 +136,7 @@ export default function App() {
       namePlaceholder: "Tên của bạn",
       commentPlaceholder: "Viết bình luận...",
       send: "Gửi",
+      sendComment: "Gửi bình luận",
       sending: "Đang gửi...",
       newsletterTitle: "Đăng ký nhận tin",
       newsletterDesc: "Nhận thông báo về các bài viết mới nhất trực tiếp qua email của bạn.",
@@ -143,7 +147,6 @@ export default function App() {
     en: {
       blogTitle: "Minimal Blog",
       posts: "Posts",
-      about: "About",
       searchPlaceholder: "Search posts...",
       heroTitle: "Think, ",
       heroHighlight: "Create",
@@ -157,6 +160,12 @@ export default function App() {
       latest: "Latest",
       popularTags: "Popular Tags",
       comments: "Comments",
+      contactTitle: "Contact Me",
+      contactDesc: "Have a question or want to collaborate? Leave a message below.",
+      nameLabel: "Full Name",
+      emailLabel: "Email",
+      subjectLabel: "Subject",
+      messageLabel: "Message",
       discussion: "Discussion",
       discussionDesc: "Share your thoughts about the blog or anything else.",
       category: "Category",
@@ -166,15 +175,13 @@ export default function App() {
       namePlaceholder: "Your name",
       commentPlaceholder: "Write a comment...",
       send: "Send",
+      sendComment: "Send Comment",
       sending: "Sending...",
       newsletterTitle: "Subscribe to Newsletter",
       newsletterDesc: "Get notifications about the latest posts directly to your email.",
       emailPlaceholder: "Your email",
       subscribe: "Subscribe Now",
       footerDesc: "An open-source blog project built with React, Tailwind CSS, and Markdown. Easy to deploy and customize.",
-      aboutTitle: "Hi, I'm ",
-      aboutDesc1: "I'm a developer passionate about building elegant and useful digital products. This blog is where I document my journey of exploring technology, from the first lines of code to complex system architectures.",
-      aboutDesc2: "To me, programming is not just a job, but an art form to solve real-world problems. I believe in the power of open source and sharing knowledge within the community.",
       skills: "My Skills",
       links: "Links",
       home: "Home",
@@ -192,7 +199,13 @@ export default function App() {
   useEffect(() => {
     async function loadPosts() {
       const allPosts = await getAllPosts();
-      setPosts(allPosts);
+      // Merge categories: Lập trình -> Công nghệ
+      const mergedPosts = allPosts.map(p => ({
+        ...p,
+        category: p.category === 'Lập trình' ? 'Công nghệ' : p.category,
+        category_en: p.category_en === 'Programming' ? 'Technology' : p.category_en
+      }));
+      setPosts(mergedPosts);
       setLoading(false);
     }
     loadPosts();
@@ -295,8 +308,8 @@ export default function App() {
   const allTags = Array.from(new Set(posts.flatMap(p => lang === 'vi' ? p.tags : p.tags_en)));
   
   // Sort categories: Hot ones first, then others alphabetically
-  const hotCategories = ['Bản tin', 'Công nghệ', 'Lập trình', 'Tán gẫu'];
-  const hotCategoriesEn = ['Daily', 'Technology', 'Programming', 'Chat'];
+  const hotCategories = ['Bản tin', 'Công nghệ', 'Tán gẫu', 'Thư viện'];
+  const hotCategoriesEn = ['Daily', 'Technology', 'Chat', 'Library'];
   
   const allCategories = Array.from(new Set(posts.map(p => lang === 'vi' ? p.category : p.category_en)))
     .sort((a, b) => {
@@ -308,6 +321,8 @@ export default function App() {
       if (bIndex !== -1) return 1;
       return a.localeCompare(b);
     });
+
+  const gridCategories = lang === 'vi' ? hotCategories : hotCategoriesEn;
 
   // if (loading) {
   //   return (
@@ -340,7 +355,7 @@ export default function App() {
             <span>{t.blogTitle}</span>
           </button>
           
-          <div className="flex items-center gap-3 md:gap-6 text-[10px] md:text-sm font-sans uppercase tracking-wider text-black/60 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-3 md:gap-6 text-[10px] md:text-sm font-sans uppercase tracking-wider text-black/60">
             <button 
               onClick={() => {
                 setSelectedPost(null);
@@ -354,40 +369,69 @@ export default function App() {
             </button>
             
             {/* Categories Dropdown/List in Menu */}
-            <div className="relative group">
-              <button className={cn("hover:text-black transition-colors flex items-center gap-1 whitespace-nowrap", selectedCategory && "text-orange-600 font-bold")}>
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsCategoryMenuOpen(true)}
+              onMouseLeave={() => setIsCategoryMenuOpen(false)}
+            >
+              <button 
+                onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
+                className={cn(
+                  "hover:text-black transition-colors flex items-center gap-1 whitespace-nowrap py-2", 
+                  selectedCategory && "text-orange-600 font-bold"
+                )}
+              >
                 {t.category}
+                <ChevronDown className={cn("w-3 h-3 opacity-40 transition-transform duration-300", isCategoryMenuOpen && "rotate-180")} />
               </button>
-              <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <div className="bg-white border border-black/5 shadow-xl rounded-xl p-2 min-w-[160px]">
-                  {allCategories.map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => {
-                        setSelectedCategory(cat);
-                        setSelectedPost(null);
-                        setCurrentView('home');
-                        setCurrentPage(1);
-                      }}
-                      className={cn(
-                        "w-full text-left px-4 py-2 rounded-lg text-xs hover:bg-black/5 transition-colors",
-                        selectedCategory === cat && "bg-orange-50 text-orange-600 font-bold"
+              
+              <AnimatePresence>
+                {isCategoryMenuOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-full left-0 pt-2 z-[60]"
+                  >
+                    <div className="bg-white border border-black/10 shadow-2xl rounded-2xl p-2 min-w-[180px] backdrop-blur-xl">
+                      {allCategories.length > 0 ? (
+                        allCategories.map(cat => (
+                          <button
+                            key={cat}
+                            onClick={() => {
+                              setSelectedCategory(cat);
+                              setSelectedPost(null);
+                              setCurrentView('home');
+                              setCurrentPage(1);
+                              setIsCategoryMenuOpen(false);
+                            }}
+                            className={cn(
+                              "w-full text-left px-4 py-2.5 rounded-xl text-xs hover:bg-black/5 transition-colors flex items-center justify-between group/item",
+                              selectedCategory === cat && "bg-orange-50 text-orange-600 font-bold"
+                            )}
+                          >
+                            <span>{cat}</span>
+                            {selectedCategory === cat && <div className="w-1 h-1 rounded-full bg-orange-500" />}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="px-4 py-3 text-[10px] text-black/40 italic">
+                          Loading...
+                        </div>
                       )}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             <button 
               onClick={() => {
                 setSelectedPost(null);
-                setCurrentView('about');
+                setCurrentView('contact');
               }}
-              className={cn("hover:text-black transition-colors whitespace-nowrap", currentView === 'about' && "text-orange-600 font-bold")}
+              className={cn("hover:text-black transition-colors whitespace-nowrap", currentView === 'contact' && "text-orange-600 font-bold")}
             >
-              {t.about}
+              {t.contact}
             </button>
             <div className="flex items-center gap-2 md:gap-4 ml-1 md:ml-4 border-l border-black/10 pl-2 md:pl-4">
               <button 
@@ -411,36 +455,59 @@ export default function App() {
           {/* Main Content */}
           <div className="lg:col-span-8">
             <AnimatePresence mode="wait">
-              {currentView === 'about' ? (
+              {currentView === 'contact' ? (
                 <motion.div
-                  key="about"
+                  key="contact"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   className="space-y-12"
                 >
-                  <header className="mb-16">
-                    <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-                      {t.aboutTitle} <br />
-                      <span className="italic text-orange-600">Triet</span>.
+                  <header className="mb-10 md:mb-16">
+                    <h1 className="text-3xl md:text-7xl font-bold leading-tight mb-4 md:mb-6">
+                      {t.contactTitle}
                     </h1>
-                    <div className="prose prose-lg prose-orange max-w-none font-sans text-black/70 leading-relaxed">
-                      <p>
-                        {t.aboutDesc1}
-                      </p>
-                      <p>
-                        {t.aboutDesc2}
-                      </p>
-                      <h3 className="text-2xl font-bold text-black mt-10 mb-4 font-serif">{t.skills}</h3>
-                      <div className="flex flex-wrap gap-3">
-                        {['React', 'TypeScript', 'Node.js', 'Tailwind CSS', 'SQLite', 'Markdown'].map(skill => (
-                          <span key={skill} className="px-4 py-2 bg-black/5 rounded-full text-sm font-bold">
-                            {skill}
-                          </span>
-                        ))}
+                    <p className="text-lg md:text-xl text-black/60 max-w-2xl font-sans leading-relaxed">
+                      {t.contactDesc}
+                    </p>
+                  </header>
+
+                  <form className="bg-white border border-black/5 rounded-[32px] p-8 md:p-12 shadow-sm space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-black/40 ml-4">{t.nameLabel}</label>
+                        <input 
+                          type="text" 
+                          className="w-full bg-black/5 border-none rounded-2xl py-4 px-6 font-sans text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                          placeholder={t.namePlaceholder}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-black/40 ml-4">{t.emailLabel}</label>
+                        <input 
+                          type="email" 
+                          className="w-full bg-black/5 border-none rounded-2xl py-4 px-6 font-sans text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                          placeholder={t.emailPlaceholder}
+                        />
                       </div>
                     </div>
-                  </header>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-black/40 ml-4">{t.subjectLabel}</label>
+                      <input 
+                        type="text" 
+                        className="w-full bg-black/5 border-none rounded-2xl py-4 px-6 font-sans text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-black/40 ml-4">{t.messageLabel}</label>
+                      <textarea 
+                        className="w-full bg-black/5 border-none rounded-2xl py-4 px-6 font-sans text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all min-h-[200px]"
+                      />
+                    </div>
+                    <button className="bg-orange-500 text-white font-sans font-bold py-4 px-12 rounded-full hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20">
+                      {t.send}
+                    </button>
+                  </form>
                 </motion.div>
               ) : !selectedPost ? (
                 <motion.div
@@ -570,7 +637,7 @@ export default function App() {
                         {loading ? (
                           Array.from({ length: 4 }).map((_, i) => <CategorySkeleton key={i} />)
                         ) : (
-                          allCategories.map(cat => {
+                          gridCategories.map(cat => {
                             const categoryPosts = posts.filter(p => (lang === 'vi' ? p.category : p.category_en) === cat);
                             if (categoryPosts.length === 0) return null;
                             
@@ -924,8 +991,7 @@ export default function App() {
               <ul className="space-y-2 text-sm text-white/60">
                 <li><button onClick={() => { setSelectedPost(null); setCurrentView('home'); setCurrentPage(1); }} className="hover:text-white transition-colors">{t.home}</button></li>
                 <li><button onClick={() => { setSelectedPost(null); setCurrentView('home'); setCurrentPage(1); }} className="hover:text-white transition-colors">{t.posts}</button></li>
-                <li><button onClick={() => { setSelectedPost(null); setCurrentView('about'); }} className="hover:text-white transition-colors">{t.about}</button></li>
-                <li><button className="hover:text-white transition-colors">{t.contact}</button></li>
+                <li><button onClick={() => { setSelectedPost(null); setCurrentView('contact'); }} className="hover:text-white transition-colors">{t.contact}</button></li>
               </ul>
             </div>
             <div>
