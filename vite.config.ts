@@ -5,9 +5,15 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
+  
+  // Vercel automatically sets VERCEL = "1"
+  // GitHub Pages needs '/data-alchemy/', Vercel needs '/'
+  const isVercel = process.env.VERCEL || env.VERCEL || process.env.VERCEL_ENV || env.VERCEL_ENV;
+  const basePath = isVercel ? '/' : '/data-alchemy/';
+
   return {
     plugins: [react(), tailwindcss()],
-    base: '/data-alchemy/',
+    base: basePath,
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
