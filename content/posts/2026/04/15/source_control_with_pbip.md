@@ -118,7 +118,7 @@ Việc lựa chọn giữa PBIX và PBIP không phải là một quyết định
 *   **Tần suất thay đổi:** Đối với các báo cáo cần cập nhật liên tục và triển khai qua nhiều môi trường (Dev/Test/Prod), hãy ưu tiên **PBIP** để tận dụng sức mạnh của CI/CD Pipelines.
 
 **Kết luận:** PBIP không chỉ là một sự thay đổi kỹ thuật; nó là một cam kết về chất lượng và sự chuyên nghiệp trong quản lý dữ liệu. Bằng cách áp dụng định dạng này, các Data Alchemist không chỉ bảo vệ thành quả lao động của mình mà còn tạo ra một nền tảng vững chắc để dữ liệu thực sự trở thành tài sản giá trị nhất của doanh nghiệp.
-
+https://stuffbyyuki.com/a-complete-guide-to-git-integration-in-power-bi/
 <!-- en -->
 
 # The Era of Power BI Developer Mode: Mastering PBIP and Enterprise CI/CD Workflows
