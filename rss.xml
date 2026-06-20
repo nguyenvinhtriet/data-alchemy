@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Alchemy</title>
+    <link>https://trietnv.github.io/data-alchemy/</link>
+    <description>Một blog cá nhân về web, dữ liệu và kỹ thuật.</description>
+    <language>vi</language>
+    <lastBuildDate>Sat, 20 Jun 2026 17:46:43 GMT</lastBuildDate>
+    <atom:link href="https://trietnv.github.io/data-alchemy/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bài viết mẫu để test scaffold</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/scaffold-smoke-test</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/scaffold-smoke-test</guid>
+      <pubDate>Thu, 07 May 2026 00:00:00 GMT</pubDate>
+      <description>Test bài viết tự động</description>
+      <category>Test</category>
+      <category>Sample</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Kỷ Nguyên Power BI Developer Mode: Làm Chủ Định Dạng PBIP và Quy Trình CI/CD Doanh Nghiệp</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/pbip_power_bi_project</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/pbip_power_bi_project</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Khám phá sự chuyển dịch từ tệp PBIX truyền thống sang định dạng dự án PBIP, mở khóa khả năng kiểm soát phiên bản bằng Git và tự động hóa triển khai trên Microsoft Fabric.</description>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Kỷ Nguyên Power BI Developer Mode: Làm Chủ Định Dạng PBIP và Quy Trình CI/CD Doanh Nghiệp</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/source_control_with_pbip</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/source_control_with_pbip</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Khám phá sự chuyển dịch từ tệp PBIX truyền thống sang định dạng dự án PBIP, mở khóa khả năng kiểm soát phiên bản bằng Git và tự động hóa triển khai trên Microsoft Fabric.</description>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title> Microsoft Fabric Materialized Lake Views</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/materialized_lake_views_in_microsoft_fabric</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/materialized_lake_views_in_microsoft_fabric</guid>
+      <pubDate>Mon, 06 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Vũ Khí Bí Mật - Để Xây Dựng Pipeline Dữ Liệu Tự Động Và Hiệu Suất Cao</description>
+      <category>Microsoft Fabric</category>
+      <category>Data</category>
+      <category>Lakehouse</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Truy vấn SQL Nâng cao</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/advanced-sql-queries</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/advanced-sql-queries</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Vượt qua các câu lệnh cơ bản với Window Functions, CTEs và Subqueries phức tạp.</description>
+      <category>SQL</category>
+      <category>Advanced</category>
+      <category>Data Analysis</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Bản tin Dữ liệu Daily - 13/03/2026</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/daily-bulletin</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/daily-bulletin</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Cập nhật những tin tức mới nhất về thế giới dữ liệu, AI và công nghệ trong ngày hôm nay.</description>
+      <category>News</category>
+      <category>Daily</category>
+      <category>Tech</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Cơ bản về Mô hình hóa Dữ liệu</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/data-modeling-basics</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/data-modeling-basics</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Mô hình hóa dữ liệu là bước quan trọng để xây dựng hệ thống hiệu quả. Tìm hiểu về Star Schema và Snowflake Schema.</description>
+      <category>Data Modeling</category>
+      <category>Architecture</category>
+      <category>Database</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Data Warehouse vs Lakehouse</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/data-warehouse-vs-lakehouse</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/data-warehouse-vs-lakehouse</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Sự khác biệt giữa kho dữ liệu truyền thống và kiến trúc Lakehouse hiện đại là gì?</description>
+      <category>Data Architecture</category>
+      <category>Lakehouse</category>
+      <category>Warehouse</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Data Factory trong Microsoft Fabric</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/fabric-data-factory</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/fabric-data-factory</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Tìm hiểu cách xây dựng các đường ống dẫn dữ liệu (pipelines) hiện đại với Data Factory trong Fabric.</description>
+      <category>Microsoft Fabric</category>
+      <category>Data Factory</category>
+      <category>ETL</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Kinh nghiệm phỏng vấn vị trí Data Analyst</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/interview-tips</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/interview-tips</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Chia sẻ những mẹo nhỏ và kinh nghiệm thực tế để bạn tự tin vượt qua vòng phỏng vấn Data Analyst.</description>
+      <category>Career</category>
+      <category>Interview</category>
+      <category>Data Analyst</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Giới thiệu về SQL cho người mới bắt đầu</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/intro-to-sql</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/intro-to-sql</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>SQL là ngôn ngữ tiêu chuẩn để quản lý cơ sở dữ liệu quan hệ. Hãy cùng tìm hiểu những khái niệm cơ bản nhất.</description>
+      <category>SQL</category>
+      <category>Database</category>
+      <category>Data</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Tổng quan về Microsoft Fabric</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/microsoft-fabric-overview</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/microsoft-fabric-overview</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Microsoft Fabric là một nền tảng phân tích tất cả trong một. Tìm hiểu cách nó hợp nhất dữ liệu và phân tích.</description>
+      <category>Microsoft Fabric</category>
+      <category>Data Analytics</category>
+      <category>Cloud</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Mẹo và Thủ thuật với Pandas</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/pandas-tips-and-tricks</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/pandas-tips-and-tricks</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Tăng tốc quá trình xử lý dữ liệu của bạn với những mẹo nhỏ nhưng hiệu quả trong thư viện Pandas.</description>
+      <category>Python</category>
+      <category>Pandas</category>
+      <category>Data Cleaning</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Tự động hóa với Python</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/python-automation-scripts</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/python-automation-scripts</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Sử dụng Python để tự động hóa các tác vụ lặp đi lặp lại trong công việc hàng ngày của bạn.</description>
+      <category>Python</category>
+      <category>Automation</category>
+      <category>Productivity</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Python cho Khoa học Dữ liệu</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/python-for-data-science</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/python-for-data-science</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Tại sao Python lại là ngôn ngữ hàng đầu cho Data Science? Khám phá các thư viện phổ biến như Pandas và NumPy.</description>
+      <category>Python</category>
+      <category>Data Science</category>
+      <category>Programming</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Thư viện Báo cáo Power BI mẫu</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/report-gallery</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/report-gallery</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Khám phá các mẫu báo cáo Power BI chuyên nghiệp cho nhiều lĩnh vực khác nhau từ tài chính đến nhân sự.</description>
+      <category>Power BI</category>
+      <category>Data Visualization</category>
+      <category>Gallery</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Tối ưu hóa Hiệu năng SQL</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/sql-performance-tuning</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/sql-performance-tuning</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Làm thế nào để các câu lệnh SQL của bạn chạy nhanh hơn? Tìm hiểu về Indexes và Execution Plans.</description>
+      <category>SQL</category>
+      <category>Performance</category>
+      <category>Optimization</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Chào mừng đến với Blog của tôi</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/welcome</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/welcome</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Đây là bài viết đầu tiên trên blog tĩnh sử dụng Markdown. Hãy cùng khám phá sức mạnh của sự đơn giản.</description>
+      <category>Chào mừng</category>
+      <category>Markdown</category>
+      <category>React</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Lợi ích của Static Site Generation</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/benefits-of-ssg</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/benefits-of-ssg</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Tại sao bạn nên chọn blog tĩnh thay vì các hệ thống quản lý nội dung (CMS) phức tạp?</description>
+      <category>Web Dev</category>
+      <category>Performance</category>
+      <category>SSG</category>
+      <author>Triet</author>
+    </item>
+  </channel>
+</rss>

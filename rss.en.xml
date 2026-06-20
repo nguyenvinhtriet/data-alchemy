@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Alchemy</title>
+    <link>https://trietnv.github.io/data-alchemy/</link>
+    <description>A personal blog on web, data, and engineering.</description>
+    <language>en</language>
+    <lastBuildDate>Sat, 20 Jun 2026 17:46:43 GMT</lastBuildDate>
+    <atom:link href="https://trietnv.github.io/data-alchemy/rss.en.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sample scaffolded post</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/scaffold-smoke-test</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/scaffold-smoke-test</guid>
+      <pubDate>Thu, 07 May 2026 00:00:00 GMT</pubDate>
+      <description>Auto-scaffolded sample</description>
+      <category>Test</category>
+      <category>Sample</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>The Era of Power BI Developer Mode: Mastering PBIP and Enterprise CI/CD Workflows</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/pbip_power_bi_project</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/pbip_power_bi_project</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Explore the shift from traditional PBIX files to the PBIP project format, unlocking Git version control and deployment automation on Microsoft Fabric.</description>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>The Era of Power BI Developer Mode: Mastering PBIP and Enterprise CI/CD Workflows</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/source_control_with_pbip</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/source_control_with_pbip</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Explore the shift from traditional PBIX files to the PBIP project format, unlocking Git version control and deployment automation on Microsoft Fabric.</description>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Microsoft Fabric Materialized Lake Views</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/materialized_lake_views_in_microsoft_fabric</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/materialized_lake_views_in_microsoft_fabric</guid>
+      <pubDate>Mon, 06 Apr 2026 00:00:00 GMT</pubDate>
+      <description>The Secret Weapon - for Automated, High-Performance Data Pipelines</description>
+      <category>Microsoft Fabric</category>
+      <category>Data</category>
+      <category>Lakehouse</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Advanced SQL Queries</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/advanced-sql-queries</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/advanced-sql-queries</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Go beyond basic commands with Window Functions, CTEs, and complex Subqueries.</description>
+      <category>SQL</category>
+      <category>Advanced</category>
+      <category>Data Analysis</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Daily Data Bulletin - 03/13/2026</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/daily-bulletin</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/daily-bulletin</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Update the latest news about the world of data, AI, and technology today.</description>
+      <category>News</category>
+      <category>Daily</category>
+      <category>Tech</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Data Modeling Basics</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/data-modeling-basics</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/data-modeling-basics</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Data modeling is a crucial step to build efficient systems. Learn about Star Schema and Snowflake Schema.</description>
+      <category>Data Modeling</category>
+      <category>Architecture</category>
+      <category>Database</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Data Warehouse vs Lakehouse</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/data-warehouse-vs-lakehouse</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/data-warehouse-vs-lakehouse</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>What is the difference between traditional data warehouses and modern Lakehouse architectures?</description>
+      <category>Data Architecture</category>
+      <category>Lakehouse</category>
+      <category>Warehouse</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Data Factory in Microsoft Fabric</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/fabric-data-factory</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/fabric-data-factory</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Learn how to build modern data pipelines with Data Factory in Fabric.</description>
+      <category>Microsoft Fabric</category>
+      <category>Data Factory</category>
+      <category>ETL</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Data Analyst Interview Tips</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/interview-tips</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/interview-tips</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Share small tips and practical experiences to help you confidently pass the Data Analyst interview.</description>
+      <category>Career</category>
+      <category>Interview</category>
+      <category>Data Analyst</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Introduction to SQL for Beginners</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/intro-to-sql</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/intro-to-sql</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>SQL is the standard language for managing relational databases. Let&apos;s learn the most basic concepts.</description>
+      <category>SQL</category>
+      <category>Database</category>
+      <category>Data</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Microsoft Fabric Overview</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/microsoft-fabric-overview</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/microsoft-fabric-overview</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Microsoft Fabric is an all-in-one analytics platform. Learn how it unifies data and analytics.</description>
+      <category>Microsoft Fabric</category>
+      <category>Data Analytics</category>
+      <category>Cloud</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Pandas Tips and Tricks</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/pandas-tips-and-tricks</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/pandas-tips-and-tricks</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Speed up your data processing with small but effective tips in the Pandas library.</description>
+      <category>Python</category>
+      <category>Pandas</category>
+      <category>Data Cleaning</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Automation with Python</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/python-automation-scripts</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/python-automation-scripts</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Use Python to automate repetitive tasks in your daily work.</description>
+      <category>Python</category>
+      <category>Automation</category>
+      <category>Productivity</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Python for Data Science</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/python-for-data-science</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/python-for-data-science</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Why is Python the leading language for Data Science? Explore popular libraries like Pandas and NumPy.</description>
+      <category>Python</category>
+      <category>Data Science</category>
+      <category>Programming</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Power BI Report Gallery</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/report-gallery</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/report-gallery</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Explore professional Power BI report templates for various fields from finance to HR.</description>
+      <category>Power BI</category>
+      <category>Data Visualization</category>
+      <category>Gallery</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>SQL Performance Tuning</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/sql-performance-tuning</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/sql-performance-tuning</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>How to make your SQL statements run faster? Learn about Indexes and Execution Plans.</description>
+      <category>SQL</category>
+      <category>Performance</category>
+      <category>Optimization</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Welcome to my Blog</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/welcome</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/welcome</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>This is the first post on my static blog using Markdown. Let&apos;s explore the power of simplicity.</description>
+      <category>Welcome</category>
+      <category>Markdown</category>
+      <category>React</category>
+      <author>Triet</author>
+    </item>
+    <item>
+      <title>Benefits of Static Site Generation</title>
+      <link>https://trietnv.github.io/data-alchemy/posts/benefits-of-ssg</link>
+      <guid isPermaLink="true">https://trietnv.github.io/data-alchemy/posts/benefits-of-ssg</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Why should you choose a static blog over complex Content Management Systems (CMS)?</description>
+      <category>Web Dev</category>
+      <category>Performance</category>
+      <category>SSG</category>
+      <author>Triet</author>
+    </item>
+  </channel>
+</rss>
