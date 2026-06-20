@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+package-lock.json
+
+# Blog post markdown files are user content — never reformat them.
+content/
+
+# Auto-generated files.
+*.min.js
+*.min.css

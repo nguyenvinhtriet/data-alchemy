@@ -1,16 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Minimal Blog</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#fdfcfb" />
+    <title>Data Alchemy</title>
+    <meta name="description" content="Một blog cá nhân về web, dữ liệu và kỹ thuật." />
+    <meta name="author" content="Triet" />
+
+    <!-- Favicon — inline SVG so it works without an extra asset round-trip. -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff6b35'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Geist,Inter,sans-serif' font-weight='800' font-size='18' fill='white'%3EDA%3C/text%3E%3C/svg%3E" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://trietnv.github.io/data-alchemy/" />
+    <meta property="og:title" content="Data Alchemy" />
+    <meta property="og:description" content="Một blog cá nhân về web, dữ liệu và kỹ thuật." />
+    <meta property="og:image" content="https://trietnv.github.io/data-alchemy/og-default.png" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Data Alchemy" />
+    <meta name="twitter:description" content="Một blog cá nhân về web, dữ liệu và kỹ thuật." />
+    <meta name="twitter:image" content="https://trietnv.github.io/data-alchemy/og-default.png" />
+
+    <!-- Discovery -->
+    <link rel="alternate" type="application/rss+xml" title="Data Alchemy (Vietnamese)" href="/data-alchemy/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Data Alchemy (English)" href="/data-alchemy/rss.en.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Fonts:
+        Geist          — primary sans (Latin). Replaces Inter — more character, same readability.
+        Geist Mono     — code blocks, numbers, dates.
+        Be Vietnam Pro — Vietnamese diacritic coverage; falls through naturally for VN strings.
+    -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local SQLite databases (not synced to git; lost on redeploy by design)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm

@@ -1,5 +1,6 @@
-import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 
@@ -9,8 +10,14 @@ if (typeof window !== 'undefined') {
   window.Buffer = Buffer;
 }
 
+// `BASE_URL` is Vite's runtime base path (matches `base` in vite.config.ts).
+// Strip the trailing slash for react-router-dom's basename, e.g. '/data-alchemy/' → '/data-alchemy'.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter basename={basename}>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );

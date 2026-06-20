@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap (regenerated on every build)
+Sitemap: https://trietnv.github.io/data-alchemy/sitemap.xml
