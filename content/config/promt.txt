@@ -1,0 +1,10 @@
+I have two files for you to process:
+    instruction.md: This defines the structure, YAML tags, and bilingual layout.
+    content.md: This contains the raw technical notes.
+Your Task: Act as a Data Alchemist and transform the notes into a high-performance blog post.
+    Execution Steps:
+    Follow the 'Tag -> VN -> `` -> EN' flow strictly.
+    Use ALL information from content.md without truncating any details; only expand.
+    Ensure the `` tag is placed exactly between the full Vietnamese and full English versions.
+Final Requirement (EXPORT):
+    Once the content is ready, use your Python/Code tool to save this entire content into a file named result.md and provide me with a download link. > * Do not just output the text; I need the actual .md file to download.
